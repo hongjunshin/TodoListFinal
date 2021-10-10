@@ -1,7 +1,6 @@
 package com.todo.service;
 
-import java.io.Writer;
-import java.io.*;
+
 import java.util.*;
 
 import com.todo.dao.TodoItem;
@@ -30,8 +29,10 @@ public class TodoUtil {
 		desc = sc.nextLine().trim();
 		System.out.print("마감일자를 입력하시오 : ");
 		due_date = sc.next().trim();
+	System.out.print("난이도를 입력하시오 (1~5): ");
+		int difficulty = sc.nextInt();
 		
-		TodoItem t = new TodoItem(title, category,desc,due_date,0);
+		TodoItem t = new TodoItem(title, category,desc,due_date,0,difficulty);
 		if(list.addItem(t)>0)
 			System.out.println("추가되었습니다."); 
 	}
@@ -87,8 +88,10 @@ public class TodoUtil {
 		String new_description = sc.nextLine().trim();
 		System.out.print("새로운 마감일자 : ");
 		String due_date = sc.nextLine().trim();
+		System.out.print("새로운 난이도 (1~5): ");
+		int difficulty = sc.nextInt();
 		
-		TodoItem t = new TodoItem(new_title,category, new_description,due_date,0);
+		TodoItem t = new TodoItem(new_title,category, new_description,due_date,0,difficulty);
 		t.setId(number);
 		if(l.editItem(t)>0)
 			System.out.println("항목이 수정되었습니다.");
@@ -112,7 +115,7 @@ public class TodoUtil {
 	
 	public static void listAll(TodoList l, int number) {
 		int count = 0;
-		for (TodoItem item : l.getList(1)) {
+		for (TodoItem item : l.getList(number)) {
 			System.out.println(item.toString());
 			count++;
 		}
@@ -148,6 +151,16 @@ public class TodoUtil {
 	public static void completeItem(TodoList l,int index) {
 		if(l.completeItem(index)>0)
 			System.out.println("완료 체크를 하였습니다"); 
+	}
+	
+	public static void percent(TodoList l, int index) {
+		Scanner sc = new Scanner(System.in);
+		l.check(index);
+		System.out.print("현재까지 진행한 퍼센트를 입력하시오 : ");
+		int percent = sc.nextInt();
+		if(l.updatePercent(index,percent)>0) {
+			System.out.println("퍼센트를 업데이트하였습니다"); 
+		}
 	}
 		
 	}

@@ -11,15 +11,12 @@ public class TodoItem {
     private String due_date;
     private String current_date;
     private int is_completed;
+    private int difficulty;
+    private int percent;
 
 
-    public int getIs_completed() {
-		return is_completed;
-	}
-	public void setIs_completed(int is_completed) {
-		this.is_completed = is_completed;
-	}
-	public TodoItem(String title, String category, String desc, String due_date, int is_completed){
+
+	public TodoItem(String title, String category, String desc, String due_date, int is_completed, int difficulty){
         this.title=title;
         this.category = category;
         this.desc=desc;
@@ -27,6 +24,8 @@ public class TodoItem {
         SimpleDateFormat f = new SimpleDateFormat("yyyy/MM/dd kk:mm:ss");
         this.current_date=f.format(new Date());
         this.is_completed = is_completed;
+        this.difficulty = difficulty;
+        percent = 0;
     }
     public String getCategory() {
 		return category;
@@ -72,6 +71,24 @@ public class TodoItem {
  	public void setId(int id) {
  		this.id = id;
  	}
+    public int getIs_completed() {
+		return is_completed;
+	}
+	public int getDifficulty() {
+		return difficulty;
+	}
+	public void setDifficulty(int difficulty) {
+		this.difficulty = difficulty;
+	}
+	public int getPercent() {
+		return percent;
+	}
+	public void setPercent(int percent) {
+		this.percent = percent;
+	}
+	public void setIs_completed(int is_completed) {
+		this.is_completed = is_completed;
+	}
  	public String checkcomplete() {
  		String check = "";
  		if(is_completed==1) {
@@ -80,9 +97,16 @@ public class TodoItem {
  		return check;
 
  	}
+ 	public String checkDiff() {
+ 		String diff = "";
+ 		for(int i =0;i<getDifficulty();i++) {
+ 			diff+="¡Ú";
+ 		}
+ 		return diff;
+ 	}
 	@Override
 	public String toString() {
-		return id +". ["+ category +"] "+title+checkcomplete()+" - " + desc + " - " + due_date+" - " + current_date;
+		return id +". ["+ category +"] "+title+checkcomplete()+" - " + desc + " - "+percent+"% - "+ checkDiff()+ " - "+ due_date+" - " + current_date;
 	}
     
     

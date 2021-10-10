@@ -10,7 +10,6 @@ public class TodoList {
 	Connection conn;
 
 	public TodoList() {
-		//this.list = new ArrayList<TodoItem>();
 		this.conn = DbConnect.getConnection();
 	}
 
@@ -31,7 +30,7 @@ public class TodoList {
 	}
 
 	public int addItem(TodoItem t) {
-		String sql = "insert into list (title, memo, category, current_date, due_date)" + " values (?,?,?,?,?);";
+		String sql = "insert into list (title, memo, category, current_date, due_date, difficulty)" + " values (?,?,?,?,?,?);";
 		PreparedStatement pstmt;
 		int count = 0;
 		try {
@@ -41,6 +40,7 @@ public class TodoList {
 			pstmt.setString(3,t.getCategory());
 			pstmt.setString(4,t.getCurrent_date());
 			pstmt.setString(5,t.getDue_date());
+			pstmt.setInt(6,t.getDifficulty());
 			count = pstmt.executeUpdate();
 			pstmt.close();
 		}catch (SQLException e) {
@@ -65,7 +65,7 @@ public class TodoList {
 	}
 
 	public int editItem(TodoItem t) {
-		String sql = "update list set title=?, memo=?, category=?, current_date=?, due_date=?"+" where id = ?;";
+		String sql = "update list set title=?, memo=?, category=?, current_date=?, due_date=?, difficulty=?"+" where id = ?;";
 		PreparedStatement pstmt;
 		int count = 0;
 		try {
@@ -75,7 +75,8 @@ public class TodoList {
 			pstmt.setString(3,t.getCategory());
 			pstmt.setString(4,t.getCurrent_date());
 			pstmt.setString(5,t.getDue_date());
-			pstmt.setInt(6,t.getId());
+			pstmt.setInt(6,t.getDifficulty());
+			pstmt.setInt(7,t.getId());
 			count = pstmt.executeUpdate();
 			pstmt.close();
 		}catch(SQLException e) {
@@ -86,7 +87,7 @@ public class TodoList {
 	public void check(int index) {
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("select title, memo, category ,due_date , current_date, is_completed from list where id='" +  index + "'");
+			ResultSet rs = stmt.executeQuery("select title, memo, category ,due_date , current_date, is_completed,percent,difficulty from list where id='" +  index + "'");
 			while(rs.next()) {
 				String title = rs.getString("title");
 				String desc = rs.getString("memo");
@@ -94,9 +95,12 @@ public class TodoList {
 				String due_date = rs.getString("due_date");
 				String current_date = rs.getString("current_date");
 				int is_completed = rs.getInt("is_completed");
-				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed);
+				int percent = rs.getInt("percent");
+				int difficulty = rs.getInt("difficulty");
+				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed,difficulty);
 				t.setId(index);
 				t.setCurrent_date(current_date);
+				t.setPercent(percent);
 				System.out.println(t.toString());
 			}
 		}catch(SQLException e) {
@@ -120,9 +124,12 @@ public class TodoList {
 				String due_date = rs.getString("due_date");
 				String current_date = rs.getString("current_date");
 				int is_completed = rs.getInt("is_completed");
-				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed);
+				int percent = rs.getInt("percent");
+				int difficulty = rs.getInt("difficulty");
+				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed,difficulty);
 				t.setId(id);
 				t.setCurrent_date(current_date);
+				t.setPercent(percent);
 				list.add(t);
 			}
 			stmt.close();
@@ -149,9 +156,12 @@ public class TodoList {
 				String due_date = rs.getString("due_date");
 				String current_date = rs.getString("current_date");
 				int is_completed = rs.getInt("is_completed");
-				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed);
+				int percent = rs.getInt("percent");
+				int difficulty = rs.getInt("difficulty");
+				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed,difficulty);
 				t.setId(id);
 				t.setCurrent_date(current_date);
+				t.setPercent(percent);
 				list.add(t);
 			}
 			pstmt.close();
@@ -177,9 +187,12 @@ public class TodoList {
 				String due_date = rs.getString("due_date");
 				String current_date = rs.getString("current_date");
 				int is_completed = rs.getInt("is_completed");
-				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed);
+				int percent = rs.getInt("percent");
+				int difficulty = rs.getInt("difficulty");
+				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed,difficulty);
 				t.setId(id);
 				t.setCurrent_date(current_date);
+				t.setPercent(percent);
 				list.add(t);
 			}
 			pstmt.close();
@@ -219,17 +232,52 @@ public class TodoList {
 	}
 	
 	public int completeItem(int index) {
-		String sql = "update list set is_completed=?"+" where id = ?;";
+		String sql = "update list set is_completed=?, percent=?"+" where id = ?;";
 		PreparedStatement pstmt;
 		int count = 0;
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1,1);
-			pstmt.setInt(2,index);
+			pstmt.setInt(2,100);
+			pstmt.setInt(3,index);
 			count = pstmt.executeUpdate();
 			pstmt.close();
 		}catch(SQLException e) {
 			e.printStackTrace();
+		}
+		return count;
+	}
+	
+	public int updatePercent(int index, int percent) {
+		int count = 0;
+		if(percent>=100) {
+			String sql = "update list set is_completed=?, percent=?"+" where id = ?;";
+			PreparedStatement pstmt;
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1,1);
+				pstmt.setInt(2,100);
+				pstmt.setInt(3,index);
+				count = pstmt.executeUpdate();
+				pstmt.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			String sql = "update list set is_completed=?, percent=?"+" where id = ?;";
+			PreparedStatement pstmt;
+			try {
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setInt(1,0);
+				pstmt.setInt(2,percent);
+				pstmt.setInt(3,index);
+				count = pstmt.executeUpdate();
+				pstmt.close();
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+			
 		}
 		return count;
 	}
@@ -268,9 +316,12 @@ public class TodoList {
 				String due_date = rs.getString("due_date");
 				String current_date = rs.getString("current_date");
 				int is_completed = rs.getInt("is_completed");
-				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed);
+				int percent = rs.getInt("percent");
+				int difficulty = rs.getInt("difficulty");
+				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed,difficulty);
 				t.setId(id);
 				t.setCurrent_date(current_date);
+				t.setPercent(percent);
 				list.add(t);
 			}
 			pstmt.close();
@@ -299,9 +350,12 @@ public class TodoList {
 				String due_date = rs.getString("due_date");
 				String current_date = rs.getString("current_date");
 				int is_completed = rs.getInt("is_completed");
-				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed);
+				int percent = rs.getInt("percent");
+				int difficulty = rs.getInt("difficulty");
+				TodoItem t = new TodoItem(title,category,desc,due_date,is_completed,difficulty);
 				t.setId(id);
 				t.setCurrent_date(current_date);
+				t.setPercent(percent);
 				list.add(t);
 			}
 			stmt.close();
@@ -311,36 +365,6 @@ public class TodoList {
 		return list;
 	}
 	
-	/*public void importData(String filename) {
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(filename));
-			String line;
-			String sql = "insert into list (title, memo, category, current_date, due_date)"+ " values (?,?,?,?,?);";
-			int records = 0;
-			while((line=br.readLine())!=null) {
-				StringTokenizer st = new StringTokenizer(line,"##");
-				String title = st.nextToken();
-				String category = st.nextToken();
-				String desc = st.nextToken();
-				String due_date = st.nextToken();
-				String current_date = st.nextToken();
-				
-				PreparedStatement pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1,title);
-				pstmt.setString(2,desc);
-				pstmt.setString(3,category);
-				pstmt.setString(4,current_date);
-				pstmt.setString(5,due_date);
-				int count = pstmt.executeUpdate();
-				if(count>0) 
-					records++;
-				pstmt.close();
-			}
-			System.out.println(records+" ภฬ ภ๚ภๅตส");
-			br.close();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-	}*/
+
 	
 }

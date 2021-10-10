@@ -42,6 +42,11 @@ public class TodoMain {
 				TodoUtil.find_cate(l, cateword);
 				break;
 				
+			case "percent":
+				int in = sc.nextInt();
+				TodoUtil.percent(l,in);
+				break;
+				
 			case "ls":
 				TodoUtil.listAll(l);
 				break;
@@ -67,8 +72,18 @@ public class TodoMain {
 				TodoUtil.listAll(l,"due_date",0);
 				break;
 				
+			case "ls_difficulty":
+				System.out.println("난이도 쉬운순으로 정렬 : ");
+				TodoUtil.listAll(l,"difficulty",1);
+				break;
+				
 			case "ls_cate":
 				TodoUtil.listCate(l);
+				break;
+				
+			case "ls_notcomp" :
+				System.out.println("완료된 항목 정렬 : ");
+				TodoUtil.listAll(l,0);
 				break;
 			
 			case "ls_comp":
