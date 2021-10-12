@@ -90,7 +90,7 @@ public class TodoMain {
 				System.out.println("완료된 항목 정렬 : ");
 				TodoUtil.listAll(l, 1);
 				break;
-				
+
 			case "ls_percent":
 				System.out.println("진행이 낮은 순으로 정렬 : ");
 				TodoUtil.listAll(l, "percent", 1);

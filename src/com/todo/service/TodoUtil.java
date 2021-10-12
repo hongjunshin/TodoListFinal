@@ -140,13 +140,13 @@ public class TodoUtil {
 
 	public static void completeItem(TodoList l, String numbers) {
 		String[] number = numbers.split(",");
-		
-		for(int i=0;i<number.length;i++) {
+
+		for (int i = 0; i < number.length; i++) {
 			String in = number[i];
 			in = in.trim();
 			int index = Integer.parseInt(in);
 			if (l.completeItem(index) > 0)
-				System.out.println(index+ "번 완료 체크를 하였습니다");
+				System.out.println(index + "번 완료 체크를 하였습니다");
 		}
 	}
 
@@ -154,7 +154,7 @@ public class TodoUtil {
 		Scanner sc = new Scanner(System.in);
 		l.check(index);
 		System.out.print("현재까지 진행한 퍼센트를 입력하시오 : ");
-		
+
 		int percent = sc.nextInt();
 		if (l.updatePercent(index, percent) > 0) {
 			System.out.println("퍼센트를 업데이트하였습니다");

@@ -6,7 +6,7 @@ public class Menu {
 		System.out.println("======================= 메뉴판 =======================");
 		System.out.println("||   ");
 		System.out.println("||    add - 항목 추가  ");
-		System.out.println("||    del - 항복 제거   "); 
+		System.out.println("||    del - 항복 제거   ");
 		System.out.println("||    edit - 항목 수정   ");
 		System.out.println("||    find 키워드 - 키워드 찾기 ");
 		System.out.println("||    find_cate 키워드 - 카테고리에서 키워드 찾기 ");
