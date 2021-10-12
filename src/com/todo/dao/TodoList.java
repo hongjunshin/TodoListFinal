@@ -1,6 +1,8 @@
 package com.todo.dao;
 
 import java.util.*;
+
+import com.google.gson.Gson;
 import com.todo.service.DbConnect;
 import java.sql.*;
 import java.io.*;
@@ -367,6 +369,65 @@ public class TodoList {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	public void listtojson() {
+		ArrayList<TodoItem> list = new ArrayList<TodoItem>();
+		Gson gson = new Gson();
+		Statement stmt;
+		try {
+			stmt = conn.createStatement();
+			String sql = "SELECT * FROM list";
+			ResultSet rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String category = rs.getString("category");
+				String title = rs.getString("title");
+				String desc = rs.getString("memo");
+				String due_date = rs.getString("due_date");
+				String current_date = rs.getString("current_date");
+				int is_completed = rs.getInt("is_completed");
+				int percent = rs.getInt("percent");
+				int difficulty = rs.getInt("difficulty");
+				TodoItem t = new TodoItem(title, category, desc, due_date, is_completed, difficulty);
+				t.setId(id);
+				t.setCurrent_date(current_date);
+				t.setPercent(percent);
+				list.add(t);
+			}
+			stmt.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String jsonstr = gson.toJson(list);
+		System.out.println(jsonstr);
+
+		try {
+			FileWriter writer = new FileWriter("data.txt");
+			writer.write(jsonstr);
+			writer.close();
+			System.out.println("파일에 저장되었습니다");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void tolist() {
+		Gson gson = new Gson();
+		String jsonstr = null;
+		
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("data.txt"));
+			jsonstr = br.readLine();
+			br.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("파일에서 데이터를 가져왔습니다");
+		TodoItem [] array = gson.fromJson(jsonstr, TodoItem[].class);
+		List<TodoItem> list = Arrays.asList(array);
+		System.out.println("list: " + list);
 	}
 
 }

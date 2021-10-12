@@ -18,10 +18,12 @@ public class Menu {
 		System.out.println("||    ls_date - 날짜순으로 정렬 ");
 		System.out.println("||    ls_date_desc - 날짜역순으로 정렬");
 		System.out.println("||    ls_difficulty - 난이도 쉬운순으로 정렬");
+		System.out.println("||    ls_percent - 완료 진행률이 낮은순으로 출력");
 		System.out.println("||    ls_cate - 카테고리 목록 출력");
 		System.out.println("||    ls_notcomp - 해야 할 항목 출력");
 		System.out.println("||    ls_comp - 완료된 항목 출력");
-		System.out.println("||    ls_percent - 완료 진행률이 낮은순으로 출력");
+		System.out.println("||    tojson - json형태로 파일에 저장");
+		System.out.println("||    tolist - json을 불러와 list에 저장");
 		System.out.println("||    exit - 프로그램 종료 ");
 		System.out.println("||   ");
 		System.out.println("====================================================");

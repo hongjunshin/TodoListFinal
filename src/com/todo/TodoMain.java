@@ -104,6 +104,14 @@ public class TodoMain {
 			case "help":
 				Menu.displaymenu();
 				break;
+				
+			case "tojson":
+				TodoUtil.tojson(l);
+				break;
+			
+			case "tolist":
+				TodoUtil.jsontolist(l);
+				break;
 
 			case "exit":
 				quit = true;
@@ -117,5 +125,6 @@ public class TodoMain {
 
 		} while (!quit);
 		DbConnect.closeConnection();
+		
 	}
 }

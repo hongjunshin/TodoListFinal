@@ -160,5 +160,12 @@ public class TodoUtil {
 			System.out.println("퍼센트를 업데이트하였습니다");
 		}
 	}
+	public static void tojson (TodoList l) {
+		l.listtojson();
+	}
+	
+	public static void jsontolist (TodoList l) {
+		l.tolist();
+	}
 
 }
