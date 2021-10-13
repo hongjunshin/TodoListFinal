@@ -93,7 +93,7 @@ public class TodoList {
 		try {
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"select title, memo, category ,due_date , current_date, is_completed,percent,difficulty from list where id='"
+					"select title, memo, category ,due_date , current_date, is_completed ,percent ,difficulty from list where id='"
 							+ index + "'");
 			while (rs.next()) {
 				String title = rs.getString("title");
